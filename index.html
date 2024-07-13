@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bouncing Balls</title>
+
+    <style>
+      * {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+
+    <script>
+      const canvas = document.querySelector('canvas');
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+
+      class Ball {
+        constructor(x, y, velx, vely, size, color) {
+          this.x = x;
+          this.y = y;
+          this.velx = velx;
+          this.vely = vely;
+          this.size = size;
+          this.color = color;
+          this.originalColor = color;
+        }
+
+        drawBall() {
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+
+        updateBall() {
+          if (this.x + this.size >= width || this.x - this.size <= 0) {
+            this.velx = -this.velx;
+          }
+
+          if (this.y + this.size >= height || this.y - this.size <= 0) {
+            this.vely = -this.vely;
+          }
+
+          this.x += this.velx;
+          this.y += this.vely;
+        }
+
+        // Check if the given coordinates (mx, my) are within the ball
+        isIntersect(mx, my) {
+          const dx = mx - this.x;
+          const dy = my - this.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          return distance <= this.size;
+        }
+
+        // Split the ball into smaller balls
+        split() {
+          const smallerBalls = [];
+          for (let i = 0; i < 3; i++) { // Create 3 smaller balls
+            const smallerSize = this.size / 2;
+            const smallerVelx = random(-5, 5);
+            const smallerVely = random(-5, 5);
+            const smallerBall = new Ball(
+              this.x + random(-this.size, this.size), // Randomize initial position near original ball
+              this.y + random(-this.size, this.size), // Randomize initial position near original ball
+              smallerVelx,
+              smallerVely,
+              smallerSize,
+              this.color
+            );
+            smallerBalls.push(smallerBall);
+          }
+          return smallerBalls;
+        }
+      }
+
+      function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      const balls = [];
+
+      while (balls.length < 25) {
+        let size = random(10, 20);
+        const ball = new Ball(
+          random(size, width - size),
+          random(size, height - size),
+          random(-5, 5),
+          random(-5, 5),
+          size,
+          `rgb(${random(0, 255)}, ${random(0, 255)}, ${random(0, 255)})`
+        );
+        balls.push(ball);
+      }
+
+      function loop() {
+        ctx.fillStyle = 'rgba(0, 0, 0)';
+        ctx.fillRect(0, 0, width, height);
+
+        for (let i = 0; i < balls.length; i++) {
+          balls[i].drawBall();
+          balls[i].updateBall();
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+
+      canvas.addEventListener('click', function(event) {
+        const mx = event.clientX;
+        const my = event.clientY;
+
+        for (let i = 0; i < balls.length; i++) {
+          if (balls[i].isIntersect(mx, my)) {
+            // Remove the original ball and add smaller balls in its place
+            const smallerBalls = balls[i].split();
+            balls.splice(i, 1, ...smallerBalls);
+            break; // Exit loop after one ball is clicked
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
