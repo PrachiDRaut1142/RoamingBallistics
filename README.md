@@ -5,21 +5,20 @@
 
 **Way 1: Using Visual Studio Code with Live Server**
 
-1. Clone the project repository.
-2. Install the Live Server extension in Visual Studio Code.
-3. Open the index.html file.
-4. Right-click and select Open With Live Server.
+1. Clone the project repository `https://github.com/PrachiDRaut1142/RoamingBallistics.git`.
+2. Install the `Live Server` extension in Visual Studio Code.
+3. Open the `index.html` file.
+4. Right-click and select `Open With Live Server`.
 
 
 **Way 2: Using a Web Browser**
 
-1. Navigate to the project directory in your file explorer.
-2. Right-click on index.html.
-3. Choose your web browser from the Open with options.
-4. Concepts Demonstrated
+1. Navigate to the `project directory` in your `file explorer`.
+2. Right-click on `index.html`.
+3. Choose your `web browser` from the `Open with options`.
 
 
-### This project includes demonstrations of the following concepts:
+### Concepts Demonstrated: This project includes demonstrations of the following concepts:
 
 **HTML5 Canvas:**
 The project utilizes the HTML5 <canvas> element to draw the balls on the screen. The canvas provides a space where you can use JavaScript to create and manipulate graphics, offering a powerful tool for dynamic and interactive visual content.
